@@ -1,0 +1,8 @@
+node_modules
+npm-debug.log
+data
+creds_backup.json
+.env
+.git
+.gitignore
+*.md

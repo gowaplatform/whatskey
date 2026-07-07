@@ -1,0 +1,21 @@
+{
+  "name": "arqsevo-import",
+  "version": "1.0.0",
+  "description": "Interface web para importar sessão WhatsApp no Evolution API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "import": "node import_evolution_session.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.7.18",
+    "axios": "^1.9.0",
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.2",
+    "pg": "^8.16.0",
+    "tweetnacl": "^1.0.3"
+  }
+}

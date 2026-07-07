@@ -1,0 +1,116 @@
+const form = document.getElementById('importForm');
+const runButton = document.getElementById('runButton');
+const clearLogsButton = document.getElementById('clearLogs');
+const logOutput = document.getElementById('logOutput');
+const runState = document.getElementById('runState');
+const healthStatus = document.getElementById('healthStatus');
+const tokenField = document.getElementById('tokenField');
+
+function setRunState(state, label) {
+  runState.className = `run-state ${state}`;
+  runState.textContent = label;
+}
+
+function renderLogs(logs = []) {
+  if (!logs.length) {
+    logOutput.textContent = 'Nenhum log disponível.';
+    return;
+  }
+
+  logOutput.textContent = logs
+    .map(entry => `[${entry.at}] [${entry.level.toUpperCase()}] ${entry.message}`)
+    .join('\n');
+}
+
+async function loadConfig() {
+  try {
+    const response = await fetch('/api/config');
+    const config = await response.json();
+
+    document.getElementById('instanceName').value = config.instanceName || '';
+    document.getElementById('evolutionApiUrl').value = config.evolutionApiUrl || '';
+    document.getElementById('dbHost').value = config.dbConfig.host || '';
+    document.getElementById('dbPort').value = config.dbConfig.port || '5432';
+    document.getElementById('dbUser').value = config.dbConfig.user || 'postgres';
+    document.getElementById('dbName').value = config.dbConfig.database || 'evolution';
+
+    if (config.authRequired) {
+      tokenField.classList.remove('hidden');
+    }
+  } catch (error) {
+    console.error('Falha ao carregar configuração padrão:', error);
+  }
+}
+
+async function checkHealth() {
+  try {
+    const response = await fetch('/api/health');
+    if (!response.ok) throw new Error('health check failed');
+    healthStatus.textContent = 'Serviço online';
+    healthStatus.className = 'status-pill ok';
+  } catch (_error) {
+    healthStatus.textContent = 'Serviço indisponível';
+    healthStatus.className = 'status-pill error';
+  }
+}
+
+form.addEventListener('submit', async event => {
+  event.preventDefault();
+
+  const formData = new FormData(form);
+  const sessionFile = document.getElementById('sessionFile').files[0];
+  const sessionJson = document.getElementById('sessionJson').value.trim();
+
+  if (!sessionFile && !sessionJson) {
+    alert('Envie um arquivo JSON ou cole o conteúdo da sessão.');
+    return;
+  }
+
+  if (sessionFile) {
+    formData.set('sessionFile', sessionFile);
+  } else {
+    formData.delete('sessionFile');
+    formData.set('sessionJson', sessionJson);
+  }
+
+  runButton.disabled = true;
+  setRunState('running', 'Executando...');
+  logOutput.textContent = 'Iniciando importação...\n';
+
+  try {
+    const headers = {};
+    const appToken = document.getElementById('appToken').value.trim();
+    if (appToken) headers['x-app-token'] = appToken;
+
+    const response = await fetch('/api/import', {
+      method: 'POST',
+      headers,
+      body: formData,
+    });
+
+    const result = await response.json();
+    renderLogs(result.logs || []);
+
+    if (response.ok && result.success) {
+      setRunState('success', 'Concluído');
+    } else {
+      setRunState('error', 'Falhou');
+      if (result.error) {
+        logOutput.textContent += `\n[ERRO] ${result.error}`;
+      }
+    }
+  } catch (error) {
+    setRunState('error', 'Falhou');
+    logOutput.textContent += `\n[ERRO] ${error.message}`;
+  } finally {
+    runButton.disabled = false;
+  }
+});
+
+clearLogsButton.addEventListener('click', () => {
+  logOutput.textContent = 'Nenhuma execução ainda.';
+  setRunState('idle', 'Aguardando');
+});
+
+loadConfig();
+checkHealth();
