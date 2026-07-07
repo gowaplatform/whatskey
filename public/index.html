@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ArqSevo - Importar Sessão Evolution</title>
+  <title>GOWA - Importar Sessão WhatsApp</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
   <div class="page">
     <header class="hero">
       <div>
-        <p class="eyebrow">Evolution API</p>
+        <p class="eyebrow">KoleK / GOWA</p>
         <h1>Importador de Sessão WhatsApp</h1>
         <p class="subtitle">
-          Envie o arquivo de sessão, confirme as configurações e execute a importação para atualizar a instância no banco do Evolution.
+          Informe o nome da sessão/dispositivo do seu WhatsApp na Plataforma, envie o arquivo de sessão ou cole o conteúdo e clique em Importar e conectar para atualizar a instância na Plataforma.
         </p>
       </div>
       <div class="status-pill" id="healthStatus">Verificando...</div>
@@ -21,51 +21,11 @@
 
     <main class="layout">
       <section class="card">
-        <h2>Configurações</h2>
+        <h2>Importação</h2>
         <form id="importForm" class="form-grid">
-          <label>
-            <span>Instância Evolution</span>
+          <label class="full">
+            <span>Nome da sessão/dispositivo</span>
             <input type="text" id="instanceName" name="instanceName" placeholder="meu" required>
-          </label>
-
-          <label>
-            <span>URL da Evolution API</span>
-            <input type="url" id="evolutionApiUrl" name="evolutionApiUrl" placeholder="http://192.168.0.10:8080" required>
-          </label>
-
-          <label>
-            <span>Global API Key</span>
-            <input type="password" id="globalApiKey" name="globalApiKey" placeholder="Sua API key" required>
-          </label>
-
-          <label>
-            <span>Host do Postgres</span>
-            <input type="text" id="dbHost" name="dbHost" placeholder="192.168.0.234" required>
-          </label>
-
-          <label>
-            <span>Porta</span>
-            <input type="number" id="dbPort" name="dbPort" value="5432" required>
-          </label>
-
-          <label>
-            <span>Usuário</span>
-            <input type="text" id="dbUser" name="dbUser" value="postgres" required>
-          </label>
-
-          <label>
-            <span>Senha</span>
-            <input type="password" id="dbPassword" name="dbPassword" placeholder="Senha do banco" required>
-          </label>
-
-          <label>
-            <span>Banco</span>
-            <input type="text" id="dbName" name="dbName" value="evolution" required>
-          </label>
-
-          <label id="tokenField" class="full hidden">
-            <span>Token de acesso</span>
-            <input type="password" id="appToken" name="appToken" placeholder="APP_TOKEN configurado no servidor">
           </label>
 
           <label class="full">

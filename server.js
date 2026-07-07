@@ -29,18 +29,22 @@ app.get('/api/config', (_req, res) => {
     const config = configFromEnv();
     res.json({
         instanceName: config.instanceName,
-        evolutionApiUrl: config.evolutionApiUrl,
-        dbConfig: {
-            host: config.dbConfig.host,
-            port: config.dbConfig.port,
-            user: config.dbConfig.user,
-            database: config.dbConfig.database,
-        },
-        authRequired: Boolean(APP_TOKEN),
-        hasDefaultSessionFile: Boolean(config.sessionFile),
-        defaultSessionFile: config.sessionFile || null,
     });
 });
+
+function validateEnvConfig(config) {
+    const missing = [];
+
+    if (!config.evolutionApiUrl) missing.push('EVOLUTION_API_URL');
+    if (!config.globalApiKey) missing.push('GLOBAL_API_KEY');
+    if (!config.dbConfig.host) missing.push('DB_HOST');
+    if (!config.dbConfig.password) missing.push('DB_PASSWORD');
+    if (!config.dbConfig.database) missing.push('DB_NAME');
+
+    if (missing.length) {
+        throw new Error(`Configuração do servidor incompleta. Defina no .env: ${missing.join(', ')}`);
+    }
+}
 
 app.post('/api/import', upload.single('sessionFile'), async (req, res) => {
     if (!isAuthorized(req)) {
@@ -52,14 +56,16 @@ app.post('/api/import', upload.single('sessionFile'), async (req, res) => {
 
     try {
         const config = configFromEnv();
-        const instanceName = req.body.instanceName || config.instanceName;
-        const evolutionApiUrl = req.body.evolutionApiUrl || config.evolutionApiUrl;
-        const globalApiKey = req.body.globalApiKey || config.globalApiKey;
-        const dbHost = req.body.dbHost || config.dbConfig.host;
-        const dbPort = req.body.dbPort || config.dbConfig.port;
-        const dbUser = req.body.dbUser || config.dbConfig.user;
-        const dbPassword = req.body.dbPassword || config.dbConfig.password;
-        const dbName = req.body.dbName || config.dbConfig.database;
+        validateEnvConfig(config);
+
+        const instanceName = req.body.instanceName?.trim();
+        if (!instanceName) {
+            return res.status(400).json({
+                success: false,
+                error: 'Informe o nome da sessão/dispositivo.',
+                logs,
+            });
+        }
 
         let sessionData;
         if (req.file?.buffer) {
@@ -80,15 +86,9 @@ app.post('/api/import', upload.single('sessionFile'), async (req, res) => {
             sessionData,
             sessionFile: sessionData ? undefined : config.sessionFile,
             instanceName,
-            evolutionApiUrl,
-            globalApiKey,
-            dbConfig: {
-                host: dbHost,
-                port: dbPort,
-                user: dbUser,
-                password: dbPassword,
-                database: dbName,
-            },
+            evolutionApiUrl: config.evolutionApiUrl,
+            globalApiKey: config.globalApiKey,
+            dbConfig: config.dbConfig,
             backupPath: path.join(__dirname, 'data', 'creds_backup.json'),
             onLog,
         });

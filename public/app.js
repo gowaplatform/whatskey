@@ -4,7 +4,6 @@ const clearLogsButton = document.getElementById('clearLogs');
 const logOutput = document.getElementById('logOutput');
 const runState = document.getElementById('runState');
 const healthStatus = document.getElementById('healthStatus');
-const tokenField = document.getElementById('tokenField');
 
 function setRunState(state, label) {
   runState.className = `run-state ${state}`;
@@ -26,17 +25,7 @@ async function loadConfig() {
   try {
     const response = await fetch('/api/config');
     const config = await response.json();
-
     document.getElementById('instanceName').value = config.instanceName || '';
-    document.getElementById('evolutionApiUrl').value = config.evolutionApiUrl || '';
-    document.getElementById('dbHost').value = config.dbConfig.host || '';
-    document.getElementById('dbPort').value = config.dbConfig.port || '5432';
-    document.getElementById('dbUser').value = config.dbConfig.user || 'postgres';
-    document.getElementById('dbName').value = config.dbConfig.database || 'evolution';
-
-    if (config.authRequired) {
-      tokenField.classList.remove('hidden');
-    }
   } catch (error) {
     console.error('Falha ao carregar configuração padrão:', error);
   }
@@ -57,19 +46,26 @@ async function checkHealth() {
 form.addEventListener('submit', async event => {
   event.preventDefault();
 
-  const formData = new FormData(form);
+  const formData = new FormData();
+  const instanceName = document.getElementById('instanceName').value.trim();
   const sessionFile = document.getElementById('sessionFile').files[0];
   const sessionJson = document.getElementById('sessionJson').value.trim();
+
+  if (!instanceName) {
+    alert('Informe o nome da sessão/dispositivo.');
+    return;
+  }
 
   if (!sessionFile && !sessionJson) {
     alert('Envie um arquivo JSON ou cole o conteúdo da sessão.');
     return;
   }
 
+  formData.set('instanceName', instanceName);
+
   if (sessionFile) {
     formData.set('sessionFile', sessionFile);
   } else {
-    formData.delete('sessionFile');
     formData.set('sessionJson', sessionJson);
   }
 
@@ -78,13 +74,8 @@ form.addEventListener('submit', async event => {
   logOutput.textContent = 'Iniciando importação...\n';
 
   try {
-    const headers = {};
-    const appToken = document.getElementById('appToken').value.trim();
-    if (appToken) headers['x-app-token'] = appToken;
-
     const response = await fetch('/api/import', {
       method: 'POST',
-      headers,
       body: formData,
     });
 
