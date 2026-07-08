@@ -31,6 +31,7 @@ app.get('/api/config', (_req, res) => {
     const config = configFromEnv();
     res.json({
         instanceName: config.instanceName,
+        appToken: APP_TOKEN || undefined,
     });
 });
 
@@ -70,10 +71,10 @@ app.post('/api/import', upload.single('sessionFile'), async (req, res) => {
         }
 
         let sessionData;
-        if (req.file?.buffer) {
-            sessionData = req.file.buffer.toString('utf8');
-        } else if (req.body.sessionJson) {
+        if (req.body.sessionJson) {
             sessionData = req.body.sessionJson;
+        } else if (req.file?.buffer) {
+            sessionData = req.file.buffer.toString('utf8');
         } else if (config.sessionFile) {
             sessionData = undefined;
         } else {

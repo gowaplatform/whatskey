@@ -5,6 +5,8 @@ const logOutput = document.getElementById('logOutput');
 const runState = document.getElementById('runState');
 const healthStatus = document.getElementById('healthStatus');
 
+let appConfig = {};
+
 function setRunState(state, label) {
   runState.className = `run-state ${state}`;
   runState.textContent = label;
@@ -24,8 +26,8 @@ function renderLogs(logs = []) {
 async function loadConfig() {
   try {
     const response = await fetch('/api/config');
-    const config = await response.json();
-    document.getElementById('instanceName').value = config.instanceName || '';
+    appConfig = await response.json();
+    document.getElementById('instanceName').value = appConfig.instanceName || '';
   } catch (error) {
     console.error('Falha ao carregar configuração padrão:', error);
   }
@@ -63,10 +65,14 @@ form.addEventListener('submit', async event => {
 
   formData.set('instanceName', instanceName);
 
-  if (sessionFile) {
-    formData.set('sessionFile', sessionFile);
-  } else {
+  if (sessionJson) {
     formData.set('sessionJson', sessionJson);
+  } else if (sessionFile) {
+    formData.set('sessionFile', sessionFile);
+  }
+
+  if (appConfig.appToken) {
+    formData.set('appToken', appConfig.appToken);
   }
 
   runButton.disabled = true;
