@@ -9,10 +9,11 @@ do @samucashow15
 
 ## Uso
 
-Usado para conectar contas do WhatsApp que usasm Pass Key, novo processo para conectar WhatsApp WEB.
+Usado para conectar contas do WhatsApp que usasm Pass Key, novo processo para conectar WhatsApp WEB. Use somente so Chrome.
 
-1. Instale o Passkey Linker - https://chromewebstore.google.com/detail/passkey-linker/hehoacnepmncbjckgnfekfcgdijpigaj - (Créditos e iferecido por Pedrinho da ZDG)
-2. Acesse o WhatsApp WEB e conecte seu dispositivo, siga o processo do WhatsApp para usar o Pass Key
+1. Instale a a extensão Passkey Linker - https://chromewebstore.google.com/detail/passkey-linker/hehoacnepmncbjckgnfekfcgdijpigaj - (Créditos e oferecido por Pedrinho da ZDG)
+1.1 Pode ser usado a extensão (Não testado) - https://github.com/marcoscarraro/whatsapp-session-extractor (Créditos e oferecido por marcoscarraro)
+2. Acesse o WhatsApp WEB no Chrome e conecte seu dispositivo, siga o processo do WhatsApp para usar o Pass Key
 3. Após conectado no WhatsApp use a extensão para extrair a creds
 4. Extrai e copia a creds
 5. Informe o nome da instância e use a creds extraída para atualizar a conexão na API
