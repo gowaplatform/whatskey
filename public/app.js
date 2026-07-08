@@ -105,7 +105,10 @@ form.addEventListener('submit', async event => {
 });
 
 clearLogsButton.addEventListener('click', () => {
-  logOutput.textContent = 'Nenhuma execução ainda.';
+  document.getElementById('instanceName').value = '';
+  document.getElementById('sessionFile').value = '';
+  document.getElementById('sessionJson').value = '';
+  logOutput.textContent = '...';
   setRunState('idle', 'Aguardando');
 });
 
