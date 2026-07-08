@@ -24,7 +24,7 @@ function isAuthorized(req) {
 }
 
 app.get('/api/health', (_req, res) => {
-    res.json({ ok: true, service: 'arqsevo-import' });
+    res.json({ ok: true, service: 'whatskey-import' });
 });
 
 app.get('/api/config', (_req, res) => {
@@ -124,5 +124,5 @@ const dataDir = path.join(__dirname, 'data');
 require('fs').mkdirSync(dataDir, { recursive: true });
 
 app.listen(PORT, () => {
-    console.log(`[arqsevo] Interface disponível em http://0.0.0.0:${PORT}`);
+    console.log(`[WhatstKey] Interface disponível em http://0.0.0.0:${PORT}`);
 });

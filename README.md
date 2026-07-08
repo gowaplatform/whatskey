@@ -1,10 +1,14 @@
-# arqsevo
+# WhatsKey Importador
 
 Interface web para importar sessão WhatsApp no Evolution API.
 
+## Créditos
+Baseado em https://github.com/samucashow15/arqsevo 
+do @samucashow15 
+
 ## Variáveis de ambiente
 
-Copie `.env.example` para `.env` e preencha os valores.
+Copie `.env.sample` para `.env` e preencha os valores.
 
 | Variável | Obrigatória | Descrição |
 |---|---|---|

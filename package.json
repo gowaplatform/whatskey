@@ -1,5 +1,5 @@
 {
-  "name": "arqsevo-import",
+  "name": "whatskey-import",
   "version": "1.0.0",
   "description": "Interface web para importar sessão WhatsApp no Evolution API",
   "main": "server.js",
