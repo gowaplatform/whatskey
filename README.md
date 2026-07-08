@@ -6,6 +6,17 @@ Interface web para importar sessão WhatsApp no Evolution API.
 Baseado em https://github.com/samucashow15/arqsevo 
 do @samucashow15 
 
+
+## Uso
+
+Usado para conectar contas do WhatsApp que usasm Pass Key, novo processo para conectar WhatsApp WEB.
+
+1. Instale o Passkey Linker - https://chromewebstore.google.com/detail/passkey-linker/hehoacnepmncbjckgnfekfcgdijpigaj - (Créditos e iferecido por Pedrinho da ZDG)
+2. Acesse o WhatsApp WEB e conecte seu dispositivo, siga o processo do WhatsApp para usar o Pass Key
+3. Após conectado no WhatsApp use a extensão para extrair a creds
+4. Extrai e copia a creds
+5. Informe o nome da instância e use a creds extraída para atualizar a conexão na API
+
 ## Variáveis de ambiente
 
 Copie `.env.sample` para `.env` e preencha os valores.
