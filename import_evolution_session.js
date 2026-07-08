@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const { importEvolutionSession, configFromEnv } = require('./lib/importSession');
 
 async function run() {
